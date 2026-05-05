@@ -32,7 +32,7 @@ Engineering: Developed with clean, semantic HTML and modular CSS to ensure acces
 User Experience: Features 15+ interactive screens that demonstrate a deep understanding of user flow and psychological triggers.
 
 <!-- You can add a screenshot or GIF of the app here -->
-![Sanad Preview](path/to/your/screenshot.png)
+![Sanad Preview](screens/01_home.svg)
 
 ## 🚀 How to Run Locally
 1. Clone the repo: `git clone https://github.com/Abrarayman27/Sanad-UX-Case-Study.git`
