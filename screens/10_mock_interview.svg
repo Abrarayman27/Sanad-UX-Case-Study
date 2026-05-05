@@ -1,0 +1,133 @@
+<svg width="390" height="844" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#060E1A"/><stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="aiBubbleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1A2A52"/><stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <radialGradient id="micGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2D5BFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2D5BFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="390" height="844" fill="url(#bgGrad)"/>
+
+  <!-- Status Bar -->
+  <text x="24" y="28" font-size="15" font-weight="600" fill="#F1F5F9" font-family="'SF Pro Display','Segoe UI',sans-serif" letter-spacing="-0.3">9:41</text>
+  <rect x="338" y="18" width="25" height="12" rx="3" fill="none" stroke="#F1F5F9" stroke-width="1" stroke-opacity="0.4"/>
+  <rect x="339.5" y="19.5" width="18" height="9" rx="2" fill="#F1F5F9"/>
+  <rect x="363" y="21" width="2" height="6" rx="1" fill="#F1F5F9" fill-opacity="0.4"/>
+  <rect x="135" y="10" width="120" height="34" rx="17" fill="#000"/>
+  <circle cx="190" cy="27" r="5" fill="#1a1a1a"/>
+  <circle cx="203" cy="27" r="3" fill="#111"/>
+
+  <!-- Header -->
+  <circle cx="36" cy="68" r="18" fill="#1E293B" stroke="#293548" stroke-width="0.5"/>
+  <path d="M40 68 L32 68 M36 64 L32 68 L36 72" stroke="#F1F5F9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="195" y="62" font-size="14" font-weight="700" fill="#F1F5F9" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Mock Interview</text>
+  <text x="195" y="78" font-size="11" fill="#64748B" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Junior Frontend · Medium difficulty</text>
+  <!-- Live badge -->
+  <rect x="308" y="56" width="62" height="24" rx="12" fill="rgba(255,82,82,0.15)" stroke="#FF5252" stroke-width="0.5" stroke-opacity="0.4"/>
+  <circle cx="320" cy="68" r="4" fill="#FF5252"/>
+  <text x="344" y="72" font-size="11" font-weight="700" fill="#FF5252" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">LIVE</text>
+
+  <!-- Progress bar: Q3 of 5 -->
+  <rect x="20" y="94" width="350" height="4" rx="2" fill="#1E293B"/>
+  <rect x="20" y="94" width="210" height="4" rx="2" fill="#2D5BFF"/>
+  <text x="195" y="112" font-size="11" fill="#64748B" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Question 3 of 5</text>
+
+  <!-- AI avatar (interviewer) -->
+  <rect x="155" y="124" width="80" height="80" rx="22" fill="#1E293B" stroke="#2D5BFF" stroke-width="0.5" stroke-opacity="0.5"/>
+  <!-- AI face -->
+  <circle cx="195" cy="158" r="24" fill="rgba(45,91,255,0.12)"/>
+  <text x="195" y="167" font-size="28" text-anchor="middle" font-family="sans-serif">🤖</text>
+  <!-- Speaking indicator dots -->
+  <rect x="172" y="210" width="46" height="14" rx="7" fill="#1E293B" stroke="#293548" stroke-width="0.5"/>
+  <circle cx="183" cy="217" r="2.5" fill="#2D5BFF"/>
+  <circle cx="191" cy="217" r="2.5" fill="#2D5BFF" opacity="0.6"/>
+  <circle cx="199" cy="217" r="2.5" fill="#2D5BFF" opacity="0.3"/>
+  <circle cx="207" cy="217" r="2.5" fill="#2D5BFF" opacity="0.1"/>
+
+  <!-- AI question bubble -->
+  <rect x="20" y="232" width="310" height="90" rx="16" rx="16" fill="url(#aiBubbleGrad)" stroke="#293548" stroke-width="0.5"/>
+  <!-- Tail -->
+  <polygon points="20,260 6,270 20,280" fill="#1E293B"/>
+  <text x="36" y="258" font-size="13" font-weight="600" fill="#F1F5F9" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Tell me about a time you</text>
+  <text x="36" y="274" font-size="13" font-weight="600" fill="#F1F5F9" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">debugged a complex layout</text>
+  <text x="36" y="290" font-size="13" font-weight="600" fill="#F1F5F9" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">issue in CSS. What was</text>
+  <text x="36" y="306" font-size="13" font-weight="600" fill="#F1F5F9" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">your approach?</text>
+
+  <!-- Timer -->
+  <rect x="334" y="238" width="50" height="26" rx="13" fill="rgba(255,171,0,0.1)" stroke="#FFAB00" stroke-width="0.5" stroke-opacity="0.4"/>
+  <text x="359" y="255" font-size="12" font-weight="700" fill="#FFAB00" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">1:42</text>
+
+  <!-- User answer bubble -->
+  <rect x="60" y="338" width="310" height="110" rx="16" fill="rgba(45,91,255,0.08)" stroke="#2D5BFF" stroke-width="0.5" stroke-opacity="0.3"/>
+  <!-- Tail right -->
+  <polygon points="370,365 384,375 370,385" fill="rgba(45,91,255,0.08)"/>
+  <text x="76" y="362" font-size="12" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">I had a case where a flexbox container</text>
+  <text x="76" y="378" font-size="12" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">wasn't wrapping on mobile. I used</text>
+  <text x="76" y="394" font-size="12" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">DevTools to inspect computed styles</text>
+  <text x="76" y="410" font-size="12" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">and found overflow:hidden was...</text>
+  <!-- Cursor blink -->
+  <rect x="76" y="424" width="2" height="14" rx="1" fill="#2D5BFF" opacity="0.8"/>
+
+  <!-- Hint bar -->
+  <rect x="20" y="468" width="350" height="44" rx="12" fill="rgba(0,200,83,0.06)" stroke="#00C853" stroke-width="0.5" stroke-opacity="0.25"/>
+  <text x="36" y="486" font-size="11" font-weight="600" fill="#00C853" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">💡 Tip: Mention STAR method — Situation, Task, Action, Result</text>
+  <text x="36" y="500" font-size="11" fill="#64748B" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Strong answers average 90–120 seconds</text>
+
+  <!-- Real-time feedback bar -->
+  <rect x="20" y="526" width="350" height="60" rx="14" fill="#1E293B" stroke="#293548" stroke-width="0.5"/>
+  <text x="36" y="546" font-size="11" font-weight="600" fill="#64748B" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif" letter-spacing="0.5">LIVE FEEDBACK</text>
+  <!-- Scores row -->
+  <text x="36"  y="566" font-size="11" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Clarity</text>
+  <rect x="80"  y="558" width="60" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+  <rect x="80"  y="558" width="48" height="6" rx="3" fill="#2D5BFF"/>
+  <text x="148" y="566" font-size="11" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Depth</text>
+  <rect x="186" y="558" width="60" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+  <rect x="186" y="558" width="36" height="6" rx="3" fill="#FFAB00"/>
+  <text x="254" y="566" font-size="11" fill="#94A3B8" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Confidence</text>
+  <rect x="320" y="558" width="34" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+  <rect x="320" y="558" width="28" height="6" rx="3" fill="#00C853"/>
+
+  <!-- Mic + controls -->
+  <rect x="0" y="616" width="390" height="140" fill="rgba(15,23,42,0.98)"/>
+  <line x1="0" y1="616" x2="390" y2="616" stroke="#293548" stroke-width="0.5"/>
+
+  <!-- Waveform visualizer -->
+  <rect x="30"  y="638" width="4" height="18" rx="2" fill="#2D5BFF" opacity="0.4"/>
+  <rect x="40"  y="630" width="4" height="34" rx="2" fill="#2D5BFF" opacity="0.6"/>
+  <rect x="50"  y="634" width="4" height="26" rx="2" fill="#2D5BFF" opacity="0.8"/>
+  <rect x="60"  y="626" width="4" height="42" rx="2" fill="#2D5BFF"/>
+  <rect x="70"  y="632" width="4" height="30" rx="2" fill="#2D5BFF" opacity="0.9"/>
+  <rect x="80"  y="638" width="4" height="18" rx="2" fill="#2D5BFF" opacity="0.6"/>
+  <rect x="90"  y="634" width="4" height="26" rx="2" fill="#2D5BFF" opacity="0.4"/>
+  <rect x="100" y="630" width="4" height="34" rx="2" fill="#2D5BFF" opacity="0.5"/>
+  <rect x="110" y="635" width="4" height="24" rx="2" fill="#2D5BFF" opacity="0.3"/>
+  <rect x="290" y="638" width="4" height="18" rx="2" fill="#2D5BFF" opacity="0.3"/>
+  <rect x="300" y="630" width="4" height="34" rx="2" fill="#2D5BFF" opacity="0.5"/>
+  <rect x="310" y="634" width="4" height="26" rx="2" fill="#2D5BFF" opacity="0.7"/>
+  <rect x="320" y="626" width="4" height="42" rx="2" fill="#2D5BFF"/>
+  <rect x="330" y="632" width="4" height="30" rx="2" fill="#2D5BFF" opacity="0.8"/>
+  <rect x="340" y="636" width="4" height="22" rx="2" fill="#2D5BFF" opacity="0.5"/>
+  <rect x="350" y="638" width="4" height="18" rx="2" fill="#2D5BFF" opacity="0.3"/>
+
+  <!-- Mic button -->
+  <circle cx="195" cy="666" r="36" fill="url(#micGlow)"/>
+  <circle cx="195" cy="666" r="28" fill="#2D5BFF"/>
+  <text x="195" y="674" font-size="22" text-anchor="middle" font-family="sans-serif">🎙</text>
+
+  <!-- Control buttons -->
+  <circle cx="110" cy="666" r="22" fill="#1E293B" stroke="#293548" stroke-width="0.5"/>
+  <text x="110" y="673" font-size="16" text-anchor="middle" font-family="sans-serif">⏸</text>
+  <circle cx="280" cy="666" r="22" fill="rgba(255,82,82,0.1)" stroke="rgba(255,82,82,0.3)" stroke-width="0.5"/>
+  <text x="280" y="673" font-size="16" text-anchor="middle" font-family="sans-serif">⏹</text>
+
+  <text x="110" y="698" font-size="10" fill="#64748B" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Pause</text>
+  <text x="195" y="704" font-size="10" fill="#64748B" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">Recording…</text>
+  <text x="280" y="698" font-size="10" fill="#64748B" text-anchor="middle" font-family="'Plus Jakarta Sans','Segoe UI',sans-serif">End</text>
+
+  <rect x="167" y="820" width="56" height="5" rx="2.5" fill="#F1F5F9" fill-opacity="0.3"/>
+</svg>
