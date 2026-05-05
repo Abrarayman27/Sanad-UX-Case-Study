@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Sanad — LinkedIn Carousel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#060E1A;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:'Plus Jakarta Sans',sans-serif;padding:40px 20px;}
+
+/* Slide container — LinkedIn square 1080x1080 */
+.carousel-wrap{position:relative;width:640px;}
+.slides{position:relative;width:640px;height:640px;overflow:hidden;border-radius:0;}
+
+.slide{
+  position:absolute;inset:0;
+  width:640px;height:640px;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);
+  transform:translateX(40px);
+  overflow:hidden;
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.slide.exit{opacity:0;transform:translateX(-40px);}
+
+/* ── SLIDE CONTROLS ── */
+.controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px;}
+.ctrl-btn{width:44px;height:44px;border-radius:50%;background:rgba(45,91,255,.15);border:.5px solid rgba(45,91,255,.35);color:#6690FF;font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.ctrl-btn:hover{background:rgba(45,91,255,.3);}
+.dots{display:flex;gap:6px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#293548;transition:all .3s;cursor:pointer;}
+.dot.active{width:24px;border-radius:3px;background:#2D5BFF;}
+.slide-counter{font-size:12px;color:#64748B;font-weight:600;letter-spacing:.5px;}
+
+/* ── DESIGN TOKENS ── */
+:root{
+  --blue:#2D5BFF;--blue-dark:#1A3FCC;--green:#00C853;--amber:#FFAB00;--red:#FF5252;
+  --bg:#0F172A;--surf:#1E293B;--border:#293548;
+  --t1:#F1F5F9;--t2:#CBD5E1;--t3:#94A3B8;--t4:#64748B;
+}
+
+/* ── SHARED SLIDE ELEMENTS ── */
+.slide-num{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;}
+.logo-mark{display:flex;align-items:center;gap:8px;}
+.logo-box{width:28px;height:28px;background:linear-gradient(135deg,#2D5BFF,#1A3FCC);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-family:Georgia,serif;font-style:italic;font-weight:900;color:white;position:relative;}
+.logo-dot-mark{position:absolute;top:-2px;right:-2px;width:7px;height:7px;background:#00C853;border-radius:50%;border:1.5px solid var(--slide-bg,#0F172A);}
+.logo-text{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.6);}
+.slide-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(45,91,255,.12);border:.5px solid rgba(45,91,255,.3);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:700;color:#6690FF;letter-spacing:1.5px;text-transform:uppercase;}
+.slide-tag.green{background:rgba(0,200,83,.1);border-color:rgba(0,200,83,.3);color:#00C853;}
+.slide-tag.amber{background:rgba(255,171,0,.1);border-color:rgba(255,171,0,.3);color:#FFAB00;}
+.slide-tag.red{background:rgba(255,82,82,.1);border-color:rgba(255,82,82,.3);color:#FF5252;}
+
+/* ═══════════════════════════════════
+   SLIDE 1 — HOOK / COVER
+═══════════════════════════════════ */
+#s1{background:linear-gradient(145deg,#060E1A 0%,#0F172A 50%,#0B1535 100%);}
+#s1 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(45,91,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(45,91,255,.04) 1px,transparent 1px);background-size:48px 48px;}
+#s1 .glow{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(45,91,255,.18) 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none;}
+#s1 .glow2{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,83,.08) 0%,transparent 70%);bottom:-60px;left:-60px;pointer-events:none;}
+#s1 .content{position:relative;z-index:2;padding:48px;display:flex;flex-direction:column;justify-content:space-between;height:100%;}
+#s1 .top{display:flex;justify-content:space-between;align-items:center;}
+#s1 .center{flex:1;display:flex;flex-direction:column;justify-content:center;}
+#s1 .eyebrow{font-size:11px;font-weight:700;color:#6690FF;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+#s1 h1{font-family:'Syne',sans-serif;font-size:58px;font-weight:800;line-height:1.02;letter-spacing:-2.5px;color:#F1F5F9;margin-bottom:20px;}
+#s1 h1 span{background:linear-gradient(135deg,#2D5BFF,#6690FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#s1 .sub{font-size:15px;color:#64748B;line-height:1.65;max-width:400px;}
+#s1 .bottom{display:flex;justify-content:space-between;align-items:center;}
+#s1 .swipe-hint{display:flex;align-items:center;gap:8px;font-size:12px;color:#64748B;font-weight:500;}
+#s1 .swipe-arrow{animation:swipeHint 1.5s ease-in-out infinite;}
+@keyframes swipeHint{0%,100%{transform:translateX(0);}50%{transform:translateX(6px);}}
+#s1 .stat-row{display:flex;gap:24px;}
+#s1 .stat{display:flex;flex-direction:column;}
+#s1 .stat-n{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#F1F5F9;letter-spacing:-1px;}
+#s1 .stat-l{font-size:11px;color:#475569;}
+
+/* ═══════════════════════════════════
+SLIDE 2 — THE PROBLEM
+═══════════════════════════════════ */
+#s2{background:#0F172A;}
+#s2 .content{padding:48px;display:flex;flex-direction:column;height:100%; }
+#s2 .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;}
+#s2 h2{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;line-height:1.1;max-width:340px;}
+#s2 .problem-list{display:flex;flex-direction:column;gap:12px;flex:1;}
+#s2 .prob-item{background:#1E293B;border:.5px solid #293548;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:border-color .2s;}
+#s2 .prob-item:nth-child(1){border-left:2px solid #FF5252;}
+#s2 .prob-item:nth-child(2){border-left:2px solid #FFAB00;}
+#s2 .prob-item:nth-child(3){border-left:2px solid #2D5BFF;}
+#s2 .prob-item:nth-child(4){border-left:2px solid #00C853;}
+#s2 .prob-icon{font-size:22px;flex-shrink:0;}
+#s2 .prob-text h4{font-size:14px;font-weight:700;color:#F1F5F9;margin-bottom:3px;}
+#s2 .prob-text p{font-size:12px;color:#64748B;line-height:1.4;}
+#s2 .quote{margin-top:20px;background:rgba(45,91,255,.06);border:.5px solid rgba(45,91,255,.2);border-radius:14px;padding:16px 20px;}
+#s2 .quote p{font-size:13px;font-style:italic;color:#94A3B8;line-height:1.6;}
+
+/* ═══════════════════════════════════
+   SLIDE 3 — TARGET USERS
+═══════════════════════════════════ */
+#s3{background:#0F172A;}
+#s3 .content{padding:48px;height:100%;display:flex;flex-direction:column; }
+#s3 h2{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:8px;}
+#s3 .sub{font-size:14px;color:#64748B;margin-bottom:28px;}
+#s3 .users{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;}
+#s3 .user-card{border-radius:20px;padding:24px;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+#s3 .user-card.omar{background:linear-gradient(135deg,#1A2A52,#1E293B);border:.5px solid rgba(45,91,255,.3);}
+#s3 .user-card.sarah{background:linear-gradient(135deg,#0A2010,#1E293B);border:.5px solid rgba(0,200,83,.3);}
+#s3 .u-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;margin-bottom:14px;}
+#s3 .omar .u-avatar{background:linear-gradient(135deg,#2D5BFF,#1A3FCC);}
+#s3 .sarah .u-avatar{background:linear-gradient(135deg,#009E40,#00C853);}
+#s3 .u-name{font-size:16px;font-weight:700;color:#F1F5F9;margin-bottom:2px;}
+#s3 .u-role{font-size:11px;color:#64748B;margin-bottom:14px;}
+#s3 .u-quote{font-size:12px;font-style:italic;color:#94A3B8;line-height:1.6;padding-left:12px;border-left:2px solid;margin-bottom:14px;}
+#s3 .omar .u-quote{border-color:#2D5BFF;}
+#s3 .sarah .u-quote{border-color:#00C853;}
+#s3 .u-need{font-size:11px;font-weight:600;padding:5px 12px;border-radius:99px;display:inline-block;}
+#s3 .omar .u-need{background:rgba(45,91,255,.15);color:#6690FF;}
+#s3 .sarah .u-need{background:rgba(0,200,83,.12);color:#00C853;}
+
+/* ═══════════════════════════════════
+   SLIDE 4 — PAIN POINTS
+═══════════════════════════════════ */
+#s4{background:#0F172A;}
+#s4 .content{padding:48px;height:100%;display:flex;flex-direction:column; padding: 18px; /* Reduced from 48px */
+    justify-content: space-between; /* Spreads items evenly */}
+#s4 h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:6px;}
+#s4 .sub{font-size:13px;color:#64748B;margin-bottom:28px;}
+#s4 .pains{display:flex;flex-direction:column;gap:10px;flex:1;}
+#s4 .pain{background:#1E293B;border:.5px solid #293548;border-radius:14px;padding:16px 20px;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;}
+#s4 .pain-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+#s4 .pain-body h4{font-size:13px;font-weight:700;color:#F1F5F9;margin-bottom:3px;}
+#s4 .pain-body p{font-size:11px;color:#64748B;line-height:1.4;}
+#s4 .pain-sev{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;}
+#s4 .sev-high{background:rgba(255,82,82,.12);color:#FF5252;}
+#s4 .sev-med{background:rgba(255,171,0,.1);color:#FFAB00;}
+
+/* ═══════════════════════════════════
+   SLIDE 5 — THE SOLUTION
+═══════════════════════════════════ */
+#s5{background:linear-gradient(145deg,#0B1535,#0F172A);}
+#s5 .glow{position:absolute;width:500px;height:300px;background:radial-gradient(ellipse,rgba(45,91,255,.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+#s5 .content{position:relative;z-index:2;padding:48px;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+#s5 .solution-icon{width:80px;height:80px;background:linear-gradient(135deg,#2D5BFF,#1A3FCC);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:40px;font-family:Georgia,serif;font-style:italic;font-weight:900;color:white;margin:0 auto 28px;position:relative;box-shadow:0 20px 48px rgba(45,91,255,.35);}
+#s5 .solution-icon .sdot{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#00C853;border-radius:50%;border:3px solid #0F172A;}
+#s5 h2{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;line-height:1.1;margin-bottom:16px;}
+#s5 .solution-quote{font-size:15px;color:#94A3B8;line-height:1.75;max-width:480px;margin:0 auto 32px;font-style:italic;}
+#s5 .pillars{display:flex;gap:12px;}
+#s5 .pillar{background:rgba(255,255,255,.04);border:.5px solid #293548;border-radius:14px;padding:16px;flex:1;text-align:left;}
+#s5 .pillar-i{font-size:20px;margin-bottom:8px;}
+#s5 .pillar h4{font-size:12px;font-weight:700;color:#F1F5F9;margin-bottom:4px;}
+#s5 .pillar p{font-size:11px;color:#64748B;line-height:1.5;}
+
+/* ═══════════════════════════════════
+   SLIDE 6 — KEY FEATURES
+═══════════════════════════════════ */
+#s6{background:#0F172A;}
+#s6 .content{padding:48px;height:100%;display:flex;flex-direction:column;}
+#s6 h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:6px;}
+#s6 .sub{font-size:13px;color:#64748B;margin-bottom:24px;}
+#s6 .features{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;}
+#s6 .feat{background:#1E293B;border:.5px solid #293548;border-radius:14px;padding:16px;display:flex;gap:12px;align-items:flex-start;transition:border-color .2s;}
+#s6 .feat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+#s6 .feat-body h4{font-size:13px;font-weight:700;color:#F1F5F9;margin-bottom:3px;}
+#s6 .feat-body p{font-size:11px;color:#64748B;line-height:1.45;}
+#s6 .feat-body .feat-tag{font-size:10px;font-weight:600;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:99px;}
+
+/* ═══════════════════════════════════
+   SLIDE 7 — SCREEN 1: HOME
+═══════════════════════════════════ */
+#s7{background:#060E1A;}
+#s7 .content{padding:32px;height:100%;display:flex;gap:28px;align-items:center;}
+#s7 .left{flex:1;display:flex;flex-direction:column;justify-content:center;}
+#s7 .left h2{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;color:#F1F5F9;line-height:1.1;margin-bottom:12px;}
+#s7 .left p{font-size:13px;color:#64748B;line-height:1.65;margin-bottom:20px;}
+#s7 .annotations{display:flex;flex-direction:column;gap:10px;}
+#s7 .ann{display:flex;align-items:center;gap:10px;}
+#s7 .ann-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+#s7 .ann-text{font-size:12px;color:#94A3B8;}
+#s7 .phone-frame{width:220px;height:476px;background:#0D1117;border-radius:36px;border:1px solid #2A3550;box-shadow:0 0 0 4px #0A0F1C,0 0 0 5px #1E293B,0 24px 48px rgba(0,0,0,.6);overflow:hidden;flex-shrink:0;}
+#s7 .phone-frame object{width:100%;height:100%;display:block;}
+
+/* ═══════════════════════════════════
+   SLIDE 8 — SCREEN 2: TRACKER
+═══════════════════════════════════ */
+#s8{background:#060E1A;}
+#s8 .content{padding:32px;height:100%;display:flex;gap:28px;align-items:center;}
+#s8 .phone-frame{width:220px;height:476px;background:#0D1117;border-radius:36px;border:1px solid #2A3550;box-shadow:0 0 0 4px #0A0F1C,0 0 0 5px #1E293B,0 24px 48px rgba(0,0,0,.6);overflow:hidden;flex-shrink:0;}
+#s8 .phone-frame object{width:100%;height:100%;display:block;}
+#s8 .right{flex:1;display:flex;flex-direction:column;justify-content:center;}
+#s8 .right h2{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;color:#F1F5F9;line-height:1.1;margin-bottom:12px;}
+#s8 .right p{font-size:13px;color:#64748B;line-height:1.65;margin-bottom:20px;}
+#s8 .annotations{display:flex;flex-direction:column;gap:10px;}
+#s8 .ann{display:flex;align-items:center;gap:10px;}
+#s8 .ann-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+#s8 .ann-text{font-size:12px;color:#94A3B8;}
+
+/* ═══════════════════════════════════
+   SLIDE 9 — BEFORE vs AFTER
+═══════════════════════════════════ */
+#s9{background:#0F172A;}
+#s9 .content{padding:48px;height:100%;display:flex;flex-direction:column;}
+#s9 h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:24px;}
+#s9 .compare{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;flex:1;align-items:start;}
+#s9 .col-head{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;padding:8px 0;}
+#s9 .before-head{color:#FF5252;}
+#s9 .after-head{color:#00C853;}
+#s9 .vs-col{display:flex;align-items:center;justify-content:center;padding-top:40px;}
+#s9 .vs{width:32px;height:32px;border-radius:50%;background:#1E293B;border:.5px solid #293548;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#64748B;}
+#s9 .before-items,.after-items{display:flex;flex-direction:column;gap:8px;}
+#s9 .b-item{background:rgba(255,82,82,.05);border:.5px solid rgba(255,82,82,.2);border-radius:12px;padding:12px 14px;}
+#s9 .a-item{background:rgba(0,200,83,.05);border:.5px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 14px;}
+#s9 .item-title{font-size:12px;font-weight:700;margin-bottom:3px;}
+#s9 .b-item .item-title{color:#F1F5F9;}
+#s9 .a-item .item-title{color:#F1F5F9;}
+#s9 .item-desc{font-size:11px;color:#64748B;line-height:1.45;}
+
+/* ═══════════════════════════════════
+   SLIDE 10 — DESIGN SYSTEM
+═══════════════════════════════════ */
+#s10{background:#0F172A;}
+#s10 .content{padding:48px;height:100%;display:flex;flex-direction:column;}
+#s10 h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:6px;}
+#s10 .sub{font-size:13px;color:#64748B;margin-bottom:24px;}
+#s10 .ds-section{display:flex;flex-direction:column;gap:20px;flex:1;}
+#s10 .colors-row{display:flex;gap:8px;}
+#s10 .color-block{flex:1;border-radius:10px;overflow:hidden;}
+#s10 .color-swatch{height:44px;}
+#s10 .color-info{padding:6px 8px;background:#1E293B;}
+#s10 .color-name{font-size:10px;font-weight:600;color:#F1F5F9;}
+#s10 .color-hex{font-size:10px;color:#64748B;font-family:monospace;}
+#s10 .type-section{display:flex;flex-direction:column;gap:8px;}
+#s10 .type-row{background:#1E293B;border:.5px solid #293548;border-radius:12px;padding:14px 16px;display:flex;align-items:baseline;justify-content:space-between;}
+#s10 .type-sample{color:#F1F5F9;}
+#s10 .type-meta{font-size:10px;color:#64748B;font-family:monospace;}
+#s10 .rules-row{display:flex;gap:8px;}
+#s10 .rule{background:#1E293B;border:.5px solid #293548;border-radius:12px;padding:12px;flex:1;}
+#s10 .rule-n{font-size:10px;font-weight:700;margin-bottom:4px;}
+#s10 .rule p{font-size:11px;color:#64748B;line-height:1.45;}
+
+/* ═══════════════════════════════════
+   SLIDE 11 — IMPACT
+═══════════════════════════════════ */
+#s11{background:#0F172A;}
+#s11 .content{padding:48px;height:100%;display:flex;flex-direction:column;}
+#s11 h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;color:#F1F5F9;margin-bottom:6px;}
+#s11 .sub{font-size:13px;color:#64748B;margin-bottom:24px;}
+#s11 .impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;}
+#s11 .impact-card{background:#1E293B;border:.5px solid #293548;border-radius:16px;padding:20px;display:flex;flex-direction:column;}
+#s11 .impact-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;letter-spacing:-2px;margin-bottom:6px;}
+#s11 .impact-title{font-size:13px;font-weight:700;color:#F1F5F9;margin-bottom:4px;}
+#s11 .impact-desc{font-size:11px;color:#64748B;line-height:1.5;flex:1;}
+#s11 .impact-bar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;margin-top:12px;}
+#s11 .impact-fill{height:100%;border-radius:99px;}
+
+/* ═══════════════════════════════════
+   SLIDE 12 — CTA / FINAL
+═══════════════════════════════════ */
+#s12{background:linear-gradient(145deg,#060E1A,#0F172A,#0B1535);}
+#s12 .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(45,91,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(45,91,255,.04) 1px,transparent 1px);background-size:48px 48px;}
+#s12 .glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,91,255,.14) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+#s12 .content{position:relative;z-index:2;padding:48px;height:100%;display:flex;flex-direction:column;justify-content:space-between;}
+#s12 .center{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;}
+#s12 .cta-icon{font-size:56px;margin-bottom:24px;}
+#s12 h2{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;letter-spacing:-2px;color:#F1F5F9;line-height:1.05;margin-bottom:16px;}
+#s12 h2 span{background:linear-gradient(135deg,#2D5BFF,#00C853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#s12 .cta-sub{font-size:15px;color:#64748B;line-height:1.65;max-width:420px;margin-bottom:32px;}
+#s12 .cta-links{display:flex;gap:12px;justify-content:center;}
+#s12 .cta-btn{padding:12px 28px;border-radius:99px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;}
+#s12 .cta-primary{background:linear-gradient(135deg,#2D5BFF,#1A3FCC);color:white;box-shadow:0 8px 24px rgba(45,91,255,.35); text-decoration: none;}
+#s12 .cta-secondary{background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.15);color:#94A3B8; text-decoration: none;}
+#s12 .bottom-row{display:flex;justify-content:space-between;align-items:center;}
+#s12 .tags-row{display:flex;gap:8px;}
+#s12 .hashtag{font-size:12px;color:#475569;font-weight:500;}
+@media print {
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <div class="slides">
+
+    <!-- SLIDE 1: HOOK -->
+    <div class="slide active" id="s1">
+      <div class="grid-bg"></div>
+      <div class="glow"></div>
+      <div class="glow2"></div>
+      <div class="content">
+        <div class="top">
+          <div class="logo-mark"><div class="logo-box">S<div class="logo-dot-mark"></div></div><span class="logo-text">SANAD</span></div>
+          <div class="slide-num">01 / 12</div>
+        </div>
+        <div class="center">
+          <div class="eyebrow">🎓 UX Case Study · Alexandria, Egypt</div>
+
+          <h1>Your career,<br><span>navigated.</span></h1>
+          <p class="sub">I designed Sanad — an AI career companion for Egyptian graduates stuck between overwhelming options and zero direction.</p>
+        <br>  <div class="eyebrow">By / Abrar Ayman</div>
+        </div>
+        <div class="bottom">
+          <div class="stat-row">
+            <div class="stat"><span class="stat-n">73%</span><span class="stat-l">feel decision paralysis</span></div>
+            <div class="stat"><span class="stat-n">2.5yr</span><span class="stat-l">avg professional limbo</span></div>
+            <div class="stat"><span class="stat-n">15</span><span class="stat-l">screens designed</span></div>
+          </div>
+          <div class="swipe-hint"><span>Swipe to see more</span><span class="swipe-arrow">→</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: PROBLEM -->
+    <div class="slide" id="s2">
+      <div class="content">
+        <div class="header">
+          <div>
+            <div class="slide-tag red" style="margin-bottom:12px;">01 — Problem</div>
+            <h2>Drowning in<br>options. Zero<br>direction.</h2>
+          </div>
+          <div class="slide-num">02 / 12</div>
+        </div>
+        <div class="problem-list">
+          <div class="prob-item">
+            <span class="prob-icon">🔀</span>
+            <div class="prob-text"><h4>Resource Fragmentation</h4><p>LinkedIn, YouTube, Coursera, Udemy — all at once. Paradox of choice = paralysis.</p></div>
+          </div>
+          <div class="prob-item">
+            <span class="prob-icon">🕳</span>
+            <div class="prob-text"><h4>The Hidden Skill Gap</h4><p>Automated rejections with zero feedback. No idea why. No path to improve.</p></div>
+          </div>
+          <div class="prob-item">
+            <span class="prob-icon">📉</span>
+            <div class="prob-text"><h4>Burnout Without Progress</h4><p>No system to visualize effort. Effort ≠ outcomes = users quit entirely.</p></div>
+          </div>
+          <div class="prob-item">
+            <span class="prob-icon">🏛</span>
+            <div class="prob-text"><h4>Market Disconnection</h4><p>Academic curricula lag 3-5 years behind Egyptian startup demands.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: USERS -->
+    <div class="slide" id="s3">
+      <div class="content">
+        <div class="slide-tag" style="margin-bottom:20px;">02 — Target Users</div>
+        <h2>Two personas.<br>One frustration.</h2>
+        <p class="sub">Research identified two distinct psychological states converging on the same need: direction.</p>
+        <div class="users">
+          <div class="user-card omar">
+            <div class="u-avatar omar">O</div>
+            <div class="u-name">Omar, 21</div>
+            <div class="u-role">CS Senior · Cairo University</div>
+            <div class="u-quote">"100 tabs open. I don't know which leads to a career."</div>
+            <span class="u-need">🗺 Needs: AI Roadmap</span>
+          </div>
+          <div class="user-card sarah">
+            <div class="u-avatar sarah">S</div>
+            <div class="u-name">Abrar, 23</div>
+            <div class="u-role">Graduate, 8mo job hunting</div>
+            <div class="u-quote">"I've stopped counting rejections. I just want to know why."</div>
+            <span class="u-need">📊 Needs: Tracker + Burnout Meter</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PAIN POINTS -->
+    <div class="slide" id="s4">
+      <div class="content">
+        <div class="slide-tag red" style="margin-bottom:12px;">03 — Pain Points</div>
+        <h2>Where the<br>system breaks.</h2>
+        <p class="sub">5 critical failure points identified through research.</p>
+        <div class="pains">
+          <div class="pain">
+            <div class="pain-icon" style="background:rgba(255,82,82,.1);">😵</div>
+            <div class="pain-body"><h4>Decision Paralysis</h4><p>100+ resources, no prioritization system, zero next step clarity</p></div>
+            <span class="pain-sev sev-high">Critical</span>
+          </div>
+          <div class="pain">
+            <div class="pain-icon" style="background:rgba(255,171,0,.1);">🎯</div>
+            <div class="pain-body"><h4>No Readiness Benchmark</h4><p>No way to know when skills are sufficient to confidently apply</p></div>
+            <span class="pain-sev sev-high">High</span>
+          </div>
+          <div class="pain">
+            <div class="pain-icon" style="background:rgba(255,82,82,.1);">🔇</div>
+            <div class="pain-body"><h4>Zero Rejection Feedback</h4><p>Automated "no" with no signal to improve from. Loop never closes.</p></div>
+            <span class="pain-sev sev-high">Critical</span>
+          </div>
+          <div class="pain">
+            <div class="pain-icon" style="background:rgba(255,171,0,.1);">🔋</div>
+            <div class="pain-body"><h4>Burnout Detected Too Late</h4><p>Users hit breaking point before any system intervenes</p></div>
+            <span class="pain-sev sev-med">Medium</span>
+          </div>
+          <div class="pain">
+            <div class="pain-icon" style="background:rgba(45,91,255,.1);">📊</div>
+            <div class="pain-body"><h4>No Progress Visualization</h4><p>Can't see growth → effort feels wasted → motivation collapses</p></div>
+            <span class="pain-sev sev-med">Medium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: SOLUTION -->
+    <div class="slide" id="s5">
+      <div class="glow"></div>
+      <div class="content">
+        <div style="position:absolute;top:48px;right:48px;" class="slide-num">05 / 12</div>
+        <div class="slide-tag" style="position:absolute;top:48px;left:48px;">04 — Solution</div>
+        <div style="font-size:80px;text-align:center;margin-bottom:20px;position:relative;margin-top:60px;">
+          <div style="width:80px;height:80px;background:linear-gradient(135deg,#2D5BFF,#1A3FCC);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:42px;font-style:italic;font-family:Georgia,serif;font-weight:900;color:white;margin:0 auto;box-shadow:0 20px 48px rgba(45,91,255,.35);position:relative;">S<div style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#00C853;border-radius:50%;border:3px solid #0F172A;"></div></div>
+        </div>
+        <h2 style="text-align:center;">One app.<br>Five intelligent systems.</h2>
+        <p class="solution-quote">"Sanad audits what you know, maps where to go, and walks with you every day — so your next step is always clear."</p>
+        <div class="pillars">
+          <div class="pillar"><div class="pillar-i">🎯</div><h4>Focus over Volume</h4><p>One CTA per screen. No decision fatigue.</p></div>
+          <div class="pillar"><div class="pillar-i">📊</div><h4>Data with Direction</h4><p>Every score paired with a concrete next action.</p></div>
+          <div class="pillar"><div class="pillar-i">🧠</div><h4>Psychological Safety</h4><p>Burnout detection runs silently. Intervenes before breaking point.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: FEATURES -->
+    <div class="slide" id="s6">
+      <div class="content">
+        <div class="slide-tag" style="margin-bottom:12px;">05 — Key Features</div>
+        <h2>5 systems.<br>1 goal.</h2>
+        <p class="sub">Each feature solves a specific failure point in the job search.</p>
+        <div class="features">
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(45,91,255,.12);">🧭</div>
+            <div class="feat-body"><h4>Career Match</h4><p>Swipeable role cards matched to your skill vector</p><span class="feat-tag" style="background:rgba(45,91,255,.1);color:#6690FF;">Discovery</span></div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(0,200,83,.1);">📡</div>
+            <div class="feat-body"><h4>Skill Gap Radar</h4><p>Visual audit vs target role requirements</p><span class="feat-tag" style="background:rgba(0,200,83,.1);color:#00C853;">Intelligence</span></div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(45,91,255,.12);">🗺</div>
+            <div class="feat-body"><h4>AI Roadmap</h4><p>Personalized 30-day learning path, mission-based</p><span class="feat-tag" style="background:rgba(45,91,255,.1);color:#6690FF;">Planning</span></div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(255,171,0,.1);">📋</div>
+            <div class="feat-body"><h4>App Tracker</h4><p>Kanban board with match % per job application</p><span class="feat-tag" style="background:rgba(255,171,0,.1);color:#FFAB00;">Management</span></div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(255,82,82,.1);">💓</div>
+            <div class="feat-body"><h4>Burnout Meter</h4><p>Background monitoring → recovery mode auto-triggers</p><span class="feat-tag" style="background:rgba(255,82,82,.1);color:#FF5252;">Wellbeing</span></div>
+          </div>
+          <div class="feat">
+            <div class="feat-icon" style="background:rgba(102,144,255,.1);">🎙</div>
+            <div class="feat-body"><h4>Mock Interview AI</h4><p>Live voice practice with real-time scoring</p><span class="feat-tag" style="background:rgba(102,144,255,.1);color:#6690FF;">Practice</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: SCREEN — HOME -->
+    <div class="slide" id="s7">
+      <div class="content">
+        <div class="left">
+          <div class="slide-tag" style="margin-bottom:16px;">06 — UI Screens</div>
+          <h2>Home<br>Dashboard</h2>
+          <p>The command center. Readiness score, current mission, wellbeing widget — all visible at a glance.</p>
+          <div class="annotations">
+            <div class="ann"><div class="ann-dot" style="background:#2D5BFF;"></div><span class="ann-text">Career Readiness Score — animated progress</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#00C853;"></div><span class="ann-text">Current AI mission — single CTA focus</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#FFAB00;"></div><span class="ann-text">Wellbeing pulse — ambient monitoring</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#94A3B8;"></div><span class="ann-text">Market Pulse insight cards — Egypt-specific</span></div>
+          </div>
+        </div>
+        <div class="phone-frame">
+          <object data="screens/01_home.svg" type="image/svg+xml" width="220" height="476" style="display:block;"></object>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: SCREEN — TRACKER -->
+    <div class="slide" id="s8">
+      <div class="content">
+        <div class="phone-frame">
+          <object data="screens/03_track.svg" type="image/svg+xml" width="220" height="476" style="display:block;"></object>
+        </div>
+        <div class="right">
+          <div class="slide-tag" style="margin-bottom:16px;">06 — UI Screens</div>
+          <h2>Application<br>Tracker</h2>
+          <p>Every job application in one place. Match % shows exactly where skills align — and where they don't.</p>
+          <div class="annotations">
+            <div class="ann"><div class="ann-dot" style="background:#00C853;"></div><span class="ann-text">84% match → green confidence indicator</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#FFAB00;"></div><span class="ann-text">61% match → amber caution signal</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#2D5BFF;"></div><span class="ann-text">Interview / Offer / Applied / Rejected badges</span></div>
+            <div class="ann"><div class="ann-dot" style="background:#FF5252;"></div><span class="ann-text">Rejected state — dimmed for mental clarity</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: BEFORE vs AFTER -->
+    <div class="slide" id="s9">
+      <div class="content">
+        <div class="slide-tag" style="margin-bottom:16px;">07 — User Journey</div>
+        <h2>Before → After Sanad</h2>
+        <div class="compare">
+          <div>
+            <div class="col-head before-head">❌ Before</div>
+            <div class="before-items">
+              <div class="b-item"><div class="item-title">🌀 100 tabs open</div><div class="item-desc">No prioritization. Switching between stacks daily. Nothing finished.</div></div>
+              <div class="b-item"><div class="item-title">🔇 Rejection silence</div><div class="item-desc">Automated "no" with zero feedback. The loop never closes.</div></div>
+              <div class="b-item"><div class="item-title">🔥 Burnout undetected</div><div class="item-desc">12 applications/week. 2am LinkedIn scrolling. Breaking point hit.</div></div>
+              <div class="b-item"><div class="item-title">❓ No readiness signal</div><div class="item-desc">Never knowing if skills are "enough" to confidently apply.</div></div>
+            </div>
+          </div>
+          <div class="vs-col"><div class="vs">VS</div></div>
+          <div>
+            <div class="col-head after-head">✅ After</div>
+            <div class="after-items">
+              <div class="a-item"><div class="item-title">⚡ One mission waiting</div><div class="item-desc">Day 8: Flexbox Layouts. Single CTA. No choices needed. Clarity.</div></div>
+              <div class="a-item"><div class="item-title">📡 Skill gap revealed</div><div class="item-desc">"Gap: TypeScript. Add to roadmap." Actionable improvement loop.</div></div>
+              <div class="a-item"><div class="item-title">💓 Burnout intercepted</div><div class="item-desc">Alert fires before breaking point. 24h recovery mode. Breathing exercise shown.</div></div>
+              <div class="a-item"><div class="item-title">📊 Readiness: 68%</div><div class="item-desc">"Complete Flexbox to reach 70%." One next step, always visible.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: DESIGN SYSTEM -->
+    <div class="slide" id="s10">
+      <div class="content">
+        <div class="slide-tag" style="margin-bottom:12px;">07 — Design System</div>
+        <h2>Colors that<br>communicate.</h2>
+        <p class="sub">Every color encodes a career state. No arbitrary aesthetics.</p>
+        <div class="ds-section">
+          <div class="colors-row">
+            <div class="color-block"><div class="color-swatch" style="background:#2D5BFF;"></div><div class="color-info"><div class="color-name">Primary</div><div class="color-hex">#2D5BFF</div></div></div>
+            <div class="color-block"><div class="color-swatch" style="background:#00C853;"></div><div class="color-info"><div class="color-name">Progress</div><div class="color-hex">#00C853</div></div></div>
+            <div class="color-block"><div class="color-swatch" style="background:#FFAB00;"></div><div class="color-info"><div class="color-name">Warning</div><div class="color-hex">#FFAB00</div></div></div>
+            <div class="color-block"><div class="color-swatch" style="background:#FF5252;"></div><div class="color-info"><div class="color-name">Critical</div><div class="color-hex">#FF5252</div></div></div>
+            <div class="color-block"><div class="color-swatch" style="background:#0F172A;border:.5px solid #293548;"></div><div class="color-info"><div class="color-name">Base</div><div class="color-hex">#0F172A</div></div></div>
+          </div>
+          <div class="type-section">
+            <div class="type-row"><span class="type-sample" style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-1px;">Display — Syne 800</span><span class="type-meta">Headlines</span></div>
+            <div class="type-row"><span class="type-sample" style="font-size:16px;font-weight:600;">Heading — Jakarta 600</span><span class="type-meta">Section titles</span></div>
+            <div class="type-row"><span class="type-sample" style="font-size:13px;font-weight:400;color:#94A3B8;">Body text — Jakarta 400 · 15px</span><span class="type-meta">Descriptions</span></div>
+          </div>
+          <div class="rules-row">
+            <div class="rule"><div class="rule-n" style="color:#2D5BFF;">Rule 1</div><p>1 CTA per screen. No paralysis.</p></div>
+            <div class="rule"><div class="rule-n" style="color:#00C853;">Rule 2</div><p>Every metric = an action.</p></div>
+            <div class="rule"><div class="rule-n" style="color:#FF5252;">Rule 3</div><p>Burnout overrides everything.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: IMPACT -->
+    <div class="slide" id="s11">
+      <div class="content">
+        <div class="slide-tag green" style="margin-bottom:12px;">08 — Impact</div>
+        <h2>What changes<br>when it works.</h2>
+        <p class="sub">Projected outcomes — grounded in behavioral design benchmarks.</p>
+        <div class="impact-grid">
+          <div class="impact-card"><div class="impact-num" style="color:#2D5BFF;">↓68%</div><div class="impact-title">Decision Paralysis</div><div class="impact-desc">Single CTA architecture eliminates the "what next" loop</div><div class="impact-bar"><div class="impact-fill" style="width:68%;background:#2D5BFF;"></div></div></div>
+          <div class="impact-card"><div class="impact-num" style="color:#00C853;">↑3×</div><div class="impact-title">Response Rate</div><div class="impact-desc">Skill-matched apps get 3x responses vs. Easy Apply</div><div class="impact-bar"><div class="impact-fill" style="width:75%;background:#00C853;"></div></div></div>
+          <div class="impact-card"><div class="impact-num" style="color:#FFAB00;">↓45%</div><div class="impact-title">Early Burnout</div><div class="impact-desc">Proactive monitoring keeps users in process longer</div><div class="impact-bar"><div class="impact-fill" style="width:45%;background:#FFAB00;"></div></div></div>
+          <div class="impact-card"><div class="impact-num" style="color:#00C853;">30</div><div class="impact-title">Days to Job-Ready</div><div class="impact-desc">From zero to structured portfolio + targeted applications</div><div class="impact-bar"><div class="impact-fill" style="width:80%;background:#00C853;"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: CTA -->
+    <div class="slide" id="s12">
+      <div class="grid-bg"></div>
+      <div class="glow"></div>
+      <div class="content">
+        <div class="top" style="display:flex;justify-content:space-between;">
+          <div class="logo-mark"><div class="logo-box">S<div class="logo-dot-mark" style="border-color:#060E1A;"></div></div><span class="logo-text">SANAD</span></div>
+          <div class="slide-num">12 / 12</div>
+        </div>
+        <div class="center">
+          <div class="cta-icon">🏆</div>
+          <h2>See the full<br><span>case study.</span></h2>
+          <p class="cta-sub">15 screens · Design system · User research · Prototype · Full product thinking breakdown</p>
+          <div class="cta-links">
+            <a class="cta-btn cta-primary" href="https://abrarayman27.github.io/Abrar_UI-UX_portfolio/">Portfolio Website </a>
+            
+            <a class="cta-btn cta-secondary" href="https://abrarayman27.github.io/Sanad-UX-Case-Study/">Full case Study</a>
+            <a class="cta-btn cta-primary" href="#">View on Behance</a>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <div class="tags-row">
+            <span class="hashtag">#UXDesign</span>
+            <span class="hashtag">#ProductDesign</span>
+            <span class="hashtag">#Sanad</span>
+            <span class="hashtag">#CareerTech</span>
+          </div>
+          <div style="font-size:12px;color:#475569;">سند · Smart Guide. Steady Path.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="ctrl-btn" id="prevBtn" onclick="navigate(-1)">←</button>
+    <div class="dots" id="dots"></div>
+    <button class="ctrl-btn" id="nextBtn" onclick="navigate(1)">→</button>
+    <span class="slide-counter" id="counter">1 / 12</span>
+  </div>
+</div>
+
+
+
+<script>
+const totalSlides = 12;
+let current = 0;
+let isAnimating = false;
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = ()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function navigate(dir){
+  if(isAnimating) return;
+  goTo(current + dir);
+}
+
+function goTo(idx){
+  if(isAnimating) return;
+  idx = (idx + totalSlides) % totalSlides;
+  if(idx === current) return;
+  isAnimating = true;
+
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(()=>{ slides[current].classList.remove('exit'); },500);
+
+  current = idx;
+  slides[current].style.transform = 'translateX(40px)';
+  slides[current].classList.add('active');
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      slides[current].style.transform = '';
+    });
+  });
+
+  dots.forEach((d,i)=>d.classList.toggle('active', i===current));
+  document.getElementById('counter').textContent = `${current+1} / ${totalSlides}`;
+
+  setTimeout(()=>{ isAnimating=false; }, 500);
+}
+
+// Keyboard
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') navigate(1);
+  if(e.key==='ArrowLeft') navigate(-1);
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.querySelector('.slides').addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; });
+document.querySelector('.slides').addEventListener('touchend', e=>{
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50) navigate(diff>0?1:-1);
+});
+</script>
+</body>
+</html>
